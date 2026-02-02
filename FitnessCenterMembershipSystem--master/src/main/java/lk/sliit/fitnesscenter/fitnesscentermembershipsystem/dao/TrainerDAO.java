@@ -213,11 +213,8 @@ public class TrainerDAO {
 
                     if (parts.length > 6 && parts[6].equals("FULLTIME")) {
                         double salary = Double.parseDouble(parts[7]);
-                        int workingHours = Integer.parseInt(parts[8]);
                         trainerQueue.add(new FullTimeTrainer(trainerId, name, email, contactNumber, specialty, password, salary));
                     } else if (parts.length > 6 && parts[6].equals("PARTTIME")) {
-                        double hourlyRate = Double.parseDouble(parts[7]);
-                        int hoursPerWeek = Integer.parseInt(parts[8]);
                         trainerQueue.add(new PartTimeTrainer(trainerId, name, email, contactNumber, specialty, password));
                     } else {
                         trainerQueue.add(new Trainer(trainerId, name, email, contactNumber, specialty, password));

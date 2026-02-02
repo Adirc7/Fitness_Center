@@ -116,16 +116,6 @@ public class PaymentDAO {
 //        return false;
 //    }
 
-    private void rewriteFile(List<Payment> payments) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Payment payment : payments) {
-                writer.write(payment.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Sort payments by date using insertion sort
     public List<Payment> getPaymentsSortedByDate() {

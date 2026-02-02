@@ -1,0 +1,41 @@
+name: CI — Java 21
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and test (Java 21)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [21]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+
+      - name: Verify Java
+        run: java -version && javac -version
+
+      - name: Build and run tests
+        run: |
+          chmod +x ./FitnessCenterMembershipSystem--master/mvnw
+          cd FitnessCenterMembershipSystem--master
+          ./mvnw -B -V verify
+
+      - name: Upload build artifact (WAR)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fitnesscenter-war
+          path: FitnessCenterMembershipSystem--master/target/*.war

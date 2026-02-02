@@ -1,1 +1,55 @@
-package lk.sliit.fitnesscenter.fitnesscentermembershipsystem.servlet;import jakarta.servlet.*;import jakarta.servlet.http.*;import jakarta.servlet.annotation.*;import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.dao.TrainerDAO;import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.FullTimeTrainer;import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.PartTimeTrainer;import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.Trainer;import java.io.IOException;@WebServlet(name = "AddTrainerServlet", value = "/AddTrainerServlet")public class AddTrainerServlet extends HttpServlet {    @Override    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {        String trainerId = request.getParameter("trainerId");        String name = request.getParameter("name");        String email = request.getParameter("email");        String contactNumber = request.getParameter("contactNumber");        String specialty = request.getParameter("specialty");        String password = request.getParameter("password");        String trainerType = request.getParameter("trainerType");        Trainer trainer = null;        try {            if ("FULLTIME".equals(trainerType)) {                // Use default values since fields are removed from the form                double defaultSalary = 2000.00; // Default salary                int defaultWorkingHours = 40;    // Default working hours                trainer = new FullTimeTrainer(trainerId, name, email, contactNumber, specialty, password, defaultSalary);            } else if ("PARTTIME".equals(trainerType)) {                // Use default values since fields are removed from the form                double defaultHourlyRate = 25.00; // Default hourly rate                int defaultHoursPerWeek = 20;     // Default hours per week                trainer = new PartTimeTrainer(trainerId, name, email, contactNumber, specialty, password);            } else {                request.setAttribute("message", "Invalid trainer type. Please select Full-Time or Part-Time.");                request.getRequestDispatcher("addTrainer.jsp").forward(request, response);                return;            }            TrainerDAO trainerDAO = new TrainerDAO();            boolean success = trainerDAO.addTrainer(trainer);            if (success) {                request.setAttribute("message", "Trainer added successfully!");            } else {                request.setAttribute("message", "Failed to add trainer. Please try again.");            }        } catch (Exception e) {            request.setAttribute("message", "An error occurred: " + e.getMessage());        }        request.getRequestDispatcher("addTrainer.jsp").forward(request, response);    }}
+package lk.sliit.fitnesscenter.fitnesscentermembershipsystem.servlet;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.dao.TrainerDAO;
+import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.FullTimeTrainer;
+import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.PartTimeTrainer;
+import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.Trainer;
+
+import java.io.IOException;
+
+@WebServlet(name = "AddTrainerServlet", value = "/AddTrainerServlet")
+public class AddTrainerServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String trainerId = request.getParameter("trainerId");
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String contactNumber = request.getParameter("contactNumber");
+        String specialty = request.getParameter("specialty");
+        String password = request.getParameter("password");
+        String trainerType = request.getParameter("trainerType");
+
+        Trainer trainer = null;
+
+        try {
+            if ("FULLTIME".equals(trainerType)) {
+                // Use default values since fields are removed from the form
+                double defaultSalary = 2000.00; // Default salary
+                trainer = new FullTimeTrainer(trainerId, name, email, contactNumber, specialty, password, defaultSalary);
+            } else if ("PARTTIME".equals(trainerType)) {
+                // Use default values since fields are removed from the form
+                trainer = new PartTimeTrainer(trainerId, name, email, contactNumber, specialty, password);
+            } else {
+                request.setAttribute("message", "Invalid trainer type. Please select Full-Time or Part-Time.");
+                request.getRequestDispatcher("addTrainer.jsp").forward(request, response);
+                return;
+            }
+
+            TrainerDAO trainerDAO = new TrainerDAO();
+            boolean success = trainerDAO.addTrainer(trainer);
+
+            if (success) {
+                request.setAttribute("message", "Trainer added successfully!");
+            } else {
+                request.setAttribute("message", "Failed to add trainer. Please try again.");
+            }
+        } catch (Exception e) {
+            request.setAttribute("message", "An error occurred: " + e.getMessage());
+        }
+
+        request.getRequestDispatcher("addTrainer.jsp").forward(request, response);
+    }
+}

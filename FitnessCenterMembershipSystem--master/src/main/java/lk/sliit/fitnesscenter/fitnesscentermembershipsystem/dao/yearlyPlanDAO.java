@@ -35,7 +35,7 @@ public class yearlyPlanDAO {
         private void saveyearlyPlanFile(yearlyPlans yearlyPlan) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE, true))) {
                 writer.write(yearlyPlan.getPlanId() + "," + yearlyPlan.getPlanName() + "," +
-                        yearlyPlan.getPrice() + "," +yearlyPlan.getAddons()+","+yearlyPlan.getSunbTotal()+","+yearlyPlan.getDiscont()+","+yearlyPlan.getFinalPrice());
+                        yearlyPlan.getPrice() + "," +yearlyPlan.getAddons()+","+yearlyPlan.getSubTotal()+","+yearlyPlan.getDiscont()+","+yearlyPlan.getFinalPrice());
                 writer.newLine();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -77,7 +77,7 @@ public class yearlyPlanDAO {
             try(BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
                 for (yearlyPlans yearlyPlan : yearlyPlanList) {
                     writer.write(yearlyPlan.getPlanId() + "," + yearlyPlan.getPlanName() + "," +
-                            yearlyPlan.getPrice() + "," +yearlyPlan.getAddons()+","+yearlyPlan.getSunbTotal()+","+yearlyPlan.getDiscont()+","+yearlyPlan.getFinalPrice());
+                            yearlyPlan.getPrice() + "," +yearlyPlan.getAddons()+","+yearlyPlan.getSubTotal()+","+yearlyPlan.getDiscont()+","+yearlyPlan.getFinalPrice());
                     writer.newLine();
                 }
             } catch (IOException e) {

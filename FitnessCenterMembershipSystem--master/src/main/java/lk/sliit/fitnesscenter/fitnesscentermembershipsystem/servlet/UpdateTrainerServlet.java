@@ -1,10 +1,8 @@
 package lk.sliit.fitnesscenter.fitnesscentermembershipsystem.servlet;
 import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.dao.TrainerDAO;
-import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.FullTimeTrainer;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.PartTimeTrainer;
 import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.Trainer;
 
 import java.io.IOException;

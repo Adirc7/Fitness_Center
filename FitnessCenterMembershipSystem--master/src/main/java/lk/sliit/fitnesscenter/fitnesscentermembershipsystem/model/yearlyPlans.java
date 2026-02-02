@@ -7,8 +7,8 @@ public class yearlyPlans extends monthlyPlans {
     private String discont;
     private String finalPrice;
 
-    public yearlyPlans(String planId, String planName, String price, String notes, String addons, String subTotal, String datum) {
-        super(planId, planName, price, notes);
+    public yearlyPlans(String planId, String planName, String price, String addons, String subTotal, String discont, String finalPrice) {
+        super(planId, planName, price, "");
         this.addons = addons;
         this.subTotal = subTotal;
         this.discont = discont;
@@ -19,7 +19,7 @@ public class yearlyPlans extends monthlyPlans {
         return addons;
     }
 
-    public String getSunbTotal() {
+    public String getSubTotal() {
         return subTotal;
     }
 
