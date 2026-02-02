@@ -38,7 +38,7 @@ public class AddTrainerServlet extends HttpServlet {
                 return;
             }
 
-            TrainerDAO trainerDAO = new TrainerDAO();
+            TrainerDAO trainerDAO = createTrainerDAO();
             boolean success = trainerDAO.addTrainer(trainer);
 
             if (success) {
@@ -52,4 +52,9 @@ public class AddTrainerServlet extends HttpServlet {
 
         request.getRequestDispatcher("addTrainer.jsp").forward(request, response);
     }
-}
+
+    // Test hook to inject a mock or test TrainerDAO
+    protected TrainerDAO createTrainerDAO() {
+        return new TrainerDAO();
+    }
+} 
