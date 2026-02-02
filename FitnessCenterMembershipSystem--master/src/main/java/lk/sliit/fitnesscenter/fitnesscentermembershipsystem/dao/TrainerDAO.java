@@ -10,11 +10,17 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class TrainerDAO {
-    private static final String FILE_PATH = "C:\\Users\\DELL\\Desktop\\oopProjText\\trainer.txt";
+    private static final String DEFAULT_FILE_PATH = "C:\\Users\\DELL\\Desktop\\oopProjText\\trainer.txt";
+    private final String filePath;
     private Queue<Trainer> trainerQueue = new LinkedList<>();
 
     public TrainerDAO() {
-        File directory = new File("C:\\Users\\DELL\\Desktop\\Project_Oop");
+        this(DEFAULT_FILE_PATH);
+    }
+
+    public TrainerDAO(String filePath) {
+        this.filePath = filePath;
+        File directory = new File(new File(filePath).getParent());
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -26,7 +32,7 @@ public class TrainerDAO {
 
     // Add trainer (Create)
     public boolean addTrainer(Trainer trainer) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             String line = String.format("%s,%s,%s,%s,%s,%s",
                     trainer.getTrainerId(), trainer.getName(), trainer.getEmail(),
                     trainer.getContactNumber(), trainer.getSpecialty(), trainer.getPassword());
@@ -47,7 +53,7 @@ public class TrainerDAO {
     // Get all trainers (Read)
     public List<Trainer> getAllTrainers() {
         List<Trainer> trainers = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             // Read each line from the file
             while ((line = reader.readLine()) != null) {
@@ -63,13 +69,10 @@ public class TrainerDAO {
                     //Full-time trainer
                     if (parts.length > 6 && parts[6].equals("FULLTIME")) {
                         double salary = Double.parseDouble(parts[7]);
-//                        int workingHours = Integer.parseInt(parts[8]);
                         trainers.add(new FullTimeTrainer(trainerId, name, email, contactNumber, specialty, password, salary));
                     }
                     //Part-time trainer
                     else if (parts.length > 6 && parts[6].equals("PARTTIME")) {
-//                        double hourlyRate = Double.parseDouble(parts[7]);
-//                        int hoursPerWeek = Integer.parseInt(parts[8]);
                         trainers.add(new PartTimeTrainer(trainerId, name, email, contactNumber, specialty, password));
                     } else {
                         trainers.add(new Trainer(trainerId, name, email, contactNumber, specialty, password));
@@ -151,7 +154,7 @@ public class TrainerDAO {
 
     // Helper method to save all trainers to file
     private boolean saveAllTrainers(List<Trainer> trainers) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Trainer trainer : trainers) {
                 String line = String.format("%s,%s,%s,%s,%s,%s",
                         trainer.getTrainerId(), trainer.getName(), trainer.getEmail(),
@@ -196,10 +199,10 @@ public class TrainerDAO {
     }
 
     private void loadTrainersFromFile() {
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (!file.exists()) return;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
