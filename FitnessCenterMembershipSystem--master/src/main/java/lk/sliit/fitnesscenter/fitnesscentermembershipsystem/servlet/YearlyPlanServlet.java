@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/yearlyPlanServlet")
-public class yearlyPlanServlet extends HttpServlet {
+public class YearlyPlanServlet extends HttpServlet {
 //    private static final String DIRECTORY = "C:\\Users\\yuthi\\Desktop\\Add Member plans\\Plan.info";
 //    private static final String DATA_FILE = DIRECTORY +"\\yearly-plan.txt";
 
-    private static final String DIRECTORY = "C:\\Users\\DELL\\Desktop\\oopProjText";
-    private static final String DATA_FILE = DIRECTORY + "\\yearly-plan.txt";
+    private static String DIRECTORY = "C:\\Users\\DELL\\Desktop\\oopProjText";
+    private static String DATA_FILE = DIRECTORY + File.separator + "yearly-plan.txt";
+
+    // Test helper - override data directory for tests
+    public static void setDataDirectory(String dir) {
+        DIRECTORY = dir;
+        DATA_FILE = dir + File.separator + "yearly-plan.txt";
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");

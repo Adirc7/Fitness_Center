@@ -9,18 +9,25 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class PaymentDAO {
-    private static final String FILE_PATH = "C:\\Users\\DELL\\Desktop\\oopProjText\\payment.txt";
+    private static final String DEFAULT_FILE_PATH = "C:\\Users\\DELL\\Desktop\\oopProjText\\payment.txt";
+    private final String filePath;
     private static final Queue<Payment> paymentQueue = new LinkedList<>();
 
     public PaymentDAO() {
+        this(DEFAULT_FILE_PATH);
+    }
+
+    // Test-friendly constructor to use a custom file path (temporary files)
+    public PaymentDAO(String filePath) {
+        this.filePath = filePath;
         createFileIfNotExists();
     }
 
     private void createFileIfNotExists() {
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (!file.exists()) {
             try {
-                file.getParentFile().mkdirs();
+                if (file.getParentFile() != null) file.getParentFile().mkdirs();
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -36,7 +43,7 @@ public class PaymentDAO {
     }
 
     private synchronized void processQueue() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
             while (!paymentQueue.isEmpty()) {
                 Payment payment = paymentQueue.poll();
                 writer.write(payment.toString());   // Write payment data
@@ -54,7 +61,7 @@ public class PaymentDAO {
     // Read operation(Read)
     public List<Payment> getAllPayments() {
         List<Payment> payments = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
 
             // Read each payment record line by line
@@ -78,6 +85,11 @@ public class PaymentDAO {
             e.printStackTrace(); // Error handling
         }
         return payments;
+    }
+
+    // Test helper to clear in-memory queue between tests
+    void clearQueueForTests() {
+        paymentQueue.clear();
     }
 
 
@@ -116,16 +128,6 @@ public class PaymentDAO {
 //        return false;
 //    }
 
-    private void rewriteFile(List<Payment> payments) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Payment payment : payments) {
-                writer.write(payment.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Sort payments by date using insertion sort
     public List<Payment> getPaymentsSortedByDate() {

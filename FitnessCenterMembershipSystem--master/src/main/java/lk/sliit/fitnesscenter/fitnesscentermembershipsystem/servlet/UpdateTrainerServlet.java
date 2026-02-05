@@ -1,10 +1,8 @@
 package lk.sliit.fitnesscenter.fitnesscentermembershipsystem.servlet;
 import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.dao.TrainerDAO;
-import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.FullTimeTrainer;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.PartTimeTrainer;
 import lk.sliit.fitnesscenter.fitnesscentermembershipsystem.model.Trainer;
 
 import java.io.IOException;
@@ -21,7 +19,7 @@ public class UpdateTrainerServlet extends HttpServlet {
         String specialty = request.getParameter("specialty");
         String password = request.getParameter("password");
 
-        TrainerDAO trainerDAO = new TrainerDAO();
+        TrainerDAO trainerDAO = createTrainerDAO();
         List<Trainer> trainers = trainerDAO.getAllTrainers();
         Trainer trainerToUpdate = null;
 
@@ -61,5 +59,10 @@ public class UpdateTrainerServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("loginTrainer.jsp").forward(request, response);
+    }
+
+    // Test hook to inject a mock/test TrainerDAO
+    protected TrainerDAO createTrainerDAO() {
+        return new TrainerDAO();
     }
 }
